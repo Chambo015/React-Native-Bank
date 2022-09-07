@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import React, { useState } from 'react';
 import {
   SafeAreaView,
   SectionList,
@@ -9,26 +11,26 @@ import {
   Text,
   Pressable,
   View,
-  StatusBar
-} from "react-native";
+  StatusBar,
+} from 'react-native';
 
 const DATA = [
   {
-    title: "Vue",
-    data: ["Vuex", "Vue-Router", "Vuetify"]
+    title: 'Vue',
+    data: ['Vuex', 'Vue-Router', 'Vuetify'],
   },
   {
-    title: "React",
-    data: ["React-Redux", "React-Router", "Redux-Toolkit"]
+    title: 'React',
+    data: ['React-Redux', 'React-Router', 'Redux-Toolkit'],
   },
   {
-    title: "Angular",
-    data: ["TypeScript", "NgRx", "RxJS"]
+    title: 'Angular',
+    data: ['TypeScript', 'NgRx', 'RxJS'],
   },
   {
-    title: "NodeJS",
-    data: ["Express", "MongoDB"]
-  }
+    title: 'NodeJS',
+    data: ['Express', 'MongoDB'],
+  },
 ];
 
 const Item = ({ title }) => (
@@ -37,7 +39,7 @@ const Item = ({ title }) => (
   </View>
 );
 
-function TextLorem() {
+function TextLorem({ navigation }) {
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView style={styles.scrollView}>
@@ -67,23 +69,48 @@ function TextLorem() {
           versions from the 1914 translation by H. Rackham.
         </Text>
       </ScrollView>
+      <Pressable
+        style={[styles.button, styles.buttonOpenText]}
+        onPress={() => navigation.navigate('Home')}
+      >
+        <Text style={styles.textStyle}>GO Home</Text>
+      </Pressable>
+      <Pressable
+        style={[styles.button, styles.buttonOpenText]}
+        onPress={() => navigation.push('Text')}
+      >
+        <Text style={styles.textStyle}>Again Show Text</Text>
+      </Pressable>
     </SafeAreaView>
   );
 }
 
-function List({ data }) {
+function List({ navigation, route }) {
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView style={styles.scrollView}>
+      <View style={styles.scrollView}>
         <SectionList
-          sections={data}
+          sections={DATA}
           keyExtractor={(item, index) => item + index}
           renderItem={({ item }) => <Item title={item} />}
           renderSectionHeader={({ section: { title } }) => (
             <Text style={styles.header}>{title}</Text>
           )}
         />
-      </ScrollView>
+      </View>
+      <Pressable
+        style={[styles.button, styles.buttonOpenText]}
+        onPress={() => navigation.goBack()}
+      >
+        <Text style={styles.textStyle}>go Back</Text>
+      </Pressable>
+      <Pressable
+        style={[styles.button, styles.buttonOpenText]}
+        onPress={() => navigation.push('Text')}
+      >
+        <Text style={styles.textStyle}>Show Text</Text>
+      </Pressable>
+      <Text>{route.params.title}</Text>
     </SafeAreaView>
   );
 }
@@ -95,7 +122,7 @@ function MyModal({ modalVisible, setModalVisible, children }) {
       transparent={true}
       visible={!!modalVisible}
       onRequestClose={() => {
-        Alert.alert("Modal has been closed.");
+        Alert.alert('Modal has been closed.');
         setModalVisible(!modalVisible);
       }}
     >
@@ -114,25 +141,25 @@ function MyModal({ modalVisible, setModalVisible, children }) {
   );
 }
 
-function App() {
+function HomeScreen({ navigation }) {
   const [listVisible, setListVisible] = useState(false);
 
   return (
     <View style={styles.container}>
       <MyModal modalVisible={listVisible} setModalVisible={setListVisible}>
-        {listVisible === "list" ? <List data={DATA} /> : <TextLorem />}
+        {listVisible === 'list' ? <List data={DATA} /> : <TextLorem />}
       </MyModal>
 
       <View style={styles.centeredView}>
         <Pressable
           style={[styles.button, styles.buttonOpenList]}
-          onPress={() => setListVisible("list")}
+          onPress={() => navigation.navigate('List')}
         >
           <Text style={styles.textStyle}>Show List</Text>
         </Pressable>
         <Pressable
           style={[styles.button, styles.buttonOpenText]}
-          onPress={() => setListVisible("text")}
+          onPress={() => navigation.navigate('Text')}
         >
           <Text style={styles.textStyle}>Show Text</Text>
         </Pressable>
@@ -140,77 +167,89 @@ function App() {
     </View>
   );
 }
+const Stack = createNativeStackNavigator();
+function App() {
+  return (
+    <NavigationContainer>
+      <Stack.Navigator>
+        <Stack.Screen name="Home" component={HomeScreen} />
+        <Stack.Screen name="List" component={List} />
+        <Stack.Screen name="Text" component={TextLorem} />
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
+}
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingTop: StatusBar.currentHeight,
-    marginHorizontal: 16
+    marginHorizontal: 16,
+    marginVertical: 20,
   },
   item: {
-    backgroundColor: "#f9c2ff",
+    backgroundColor: '#f9c2ff',
     padding: 20,
-    marginVertical: 8
+    marginVertical: 8,
   },
   header: {
     fontSize: 20,
-    backgroundColor: "#fff"
+    backgroundColor: '#fff',
   },
   title: {
-    fontSize: 14
+    fontSize: 14,
   },
   centeredView: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    marginTop: 22
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 22,
   },
   modalView: {
     margin: 20,
-    backgroundColor: "white",
+    backgroundColor: 'white',
     borderRadius: 20,
     padding: 35,
-    alignItems: "center",
-    shadowColor: "#000",
+    alignItems: 'center',
+    shadowColor: '#000',
     shadowOffset: {
       width: 0,
-      height: 2
+      height: 2,
     },
     shadowOpacity: 0.25,
     shadowRadius: 4,
-    elevation: 5
+    elevation: 5,
   },
   button: {
     borderRadius: 20,
     padding: 10,
-    elevation: 2
+    elevation: 2,
   },
   buttonOpenList: {
-    backgroundColor: "#F194FF"
+    backgroundColor: '#F194FF',
   },
   buttonOpenText: {
     marginTop: 20,
-    backgroundColor: "#2dcc70"
+    backgroundColor: '#2dcc70',
   },
   buttonClose: {
     marginTop: 10,
-    backgroundColor: "#2196F3"
+    backgroundColor: '#2196F3',
   },
   textStyle: {
-    color: "white",
-    fontWeight: "bold",
-    textAlign: "center"
+    color: 'white',
+    fontWeight: 'bold',
+    textAlign: 'center',
   },
   scrollView: {
     paddingHorizontal: 10,
-    height: 150,
-    width: 200,
-    backgroundColor: "pink",
-    marginHorizontal: 20
+    height: 500,
+    backgroundColor: 'pink',
+    marginHorizontal: 20,
   },
   text: {
-    fontSize: 20
-  }
+    fontSize: 20,
+  },
 });
 
 export default App;
