@@ -1,6 +1,6 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   SafeAreaView,
   SectionList,
@@ -12,159 +12,87 @@ import {
   Pressable,
   View,
   StatusBar,
+  TextInput,
+  Button,
 } from 'react-native';
 
 const DATA = [
   {
-    title: 'Vue',
-    data: ['Vuex', 'Vue-Router', 'Vuetify'],
+    title: 'Форсаж',
+    genre: 'боевик, криминал, приключения',
+    id: 1,
   },
   {
-    title: 'React',
-    data: ['React-Redux', 'React-Router', 'Redux-Toolkit'],
+    title: 'Парк Юрского периода',
+    genre: 'приключения, фантастика, семейный',
+    id: 2,
   },
   {
-    title: 'Angular',
-    data: ['TypeScript', 'NgRx', 'RxJS'],
-  },
-  {
-    title: 'NodeJS',
-    data: ['Express', 'MongoDB'],
+    title: 'Аватар',
+    genre: 'фантастика, боевик, драма, приключения',
+    id: 3,
   },
 ];
 
-const Item = ({ title }) => (
+function CreateFilm({ navigation, route }) {
+  const [title, setTitle] = useState('');
+  const [genre, setGenre] = useState('');
+  return (
+    <>
+      <TextInput placeholder='Название фильма' style={styles.input} value={title} onChangeText={setTitle} />
+      <TextInput placeholder='Жанр фильма' style={styles.input} value={genre} onChangeText={setGenre} />
+      <Button title="Done" 
+				onPress={() => {
+          navigation.navigate({
+            name: 'Home',
+            params: { film: {
+              title,
+              genre,
+              id: route.params.id
+            }},
+          });
+        }}
+      />
+    </>
+  );
+}
+
+const Item = ({film}) => (
   <View style={styles.item}>
-    <Text style={styles.title}>{title}</Text>
+    <Text style={styles.header}>{film.title}</Text>
+    <Text style={styles.text}>{film.genre}</Text>
   </View>
 );
 
-function TextLorem({ navigation }) {
-  return (
-    <SafeAreaView style={styles.container}>
-      <ScrollView style={styles.scrollView}>
-        <Text style={styles.text}>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-          eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
-          minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-          aliquip ex ea commodo consequat. Duis aute irure dolor in
-          reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-          pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-          culpa qui officia deserunt mollit anim id est laborum. Where does it
-          come from? Contrary to popular belief, Lorem Ipsum is not simply
-          random text. It has roots in a piece of classical Latin literature
-          from 45 BC, making it over 2000 years old. Richard McClintock, a Latin
-          professor at Hampden-Sydney College in Virginia, looked up one of the
-          more obscure Latin words, consectetur, from a Lorem Ipsum passage, and
-          going through the cites of the word in classical literature,
-          discovered the undoubtable source. Lorem Ipsum comes from sections
-          1.10.32 and 1.10.33 of "de Finibus Bonorum et Malorum" (The Extremes
-          of Good and Evil) by Cicero, written in 45 BC. This book is a treatise
-          on the theory of ethics, very popular during the Renaissance. The
-          first line of Lorem Ipsum, "Lorem ipsum dolor sit amet..", comes from
-          a line in section 1.10.32. The standard chunk of Lorem Ipsum used
-          since the 1500s is reproduced below for those interested. Sections
-          1.10.32 and 1.10.33 from "de Finibus Bonorum et Malorum" by Cicero are
-          also reproduced in their exact original form, accompanied by English
-          versions from the 1914 translation by H. Rackham.
-        </Text>
-      </ScrollView>
-      <Pressable
-        style={[styles.button, styles.buttonOpenText]}
-        onPress={() => navigation.navigate('Home')}
-      >
-        <Text style={styles.textStyle}>GO Home</Text>
-      </Pressable>
-      <Pressable
-        style={[styles.button, styles.buttonOpenText]}
-        onPress={() => navigation.push('Text')}
-      >
-        <Text style={styles.textStyle}>Again Show Text</Text>
-      </Pressable>
-    </SafeAreaView>
-  );
-}
+function HomeScreen({ navigation, route }) {
+  const [films, setFilms] = useState([]);
 
-function List({ navigation, route }) {
+  useEffect(() => {
+    if (route.params?.film) {
+      setFilms(prev => [...prev, route.params?.film])
+    }
+  }, [route.params?.film]);
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.scrollView}>
-        <SectionList
-          sections={DATA}
-          keyExtractor={(item, index) => item + index}
-          renderItem={({ item }) => <Item title={item} />}
-          renderSectionHeader={({ section: { title } }) => (
-            <Text style={styles.header}>{title}</Text>
-          )}
-        />
+        {films.map(film => {
+          return <Item film={film} key={film.id}/>
+        })}
       </View>
       <Pressable
         style={[styles.button, styles.buttonOpenText]}
-        onPress={() => navigation.goBack()}
+        onPress={() => setFilms(DATA)}
       >
-        <Text style={styles.textStyle}>go Back</Text>
+        <Text style={styles.textStyle}>Обновить</Text>
       </Pressable>
       <Pressable
         style={[styles.button, styles.buttonOpenText]}
-        onPress={() => navigation.push('Text')}
+        onPress={() => navigation.navigate('CreateFilm', {id: films.length})}
       >
-        <Text style={styles.textStyle}>Show Text</Text>
+        <Text style={styles.textStyle}>Добавить</Text>
       </Pressable>
-      <Text>{route.params.title}</Text>
     </SafeAreaView>
-  );
-}
-
-function MyModal({ modalVisible, setModalVisible, children }) {
-  return (
-    <Modal
-      animationType="slide"
-      transparent={true}
-      visible={!!modalVisible}
-      onRequestClose={() => {
-        Alert.alert('Modal has been closed.');
-        setModalVisible(!modalVisible);
-      }}
-    >
-      <View style={styles.centeredView}>
-        <View style={styles.modalView}>
-          {children}
-          <Pressable
-            style={[styles.button, styles.buttonClose]}
-            onPress={() => setModalVisible(!modalVisible)}
-          >
-            <Text style={styles.textStyle}>Hide Modal</Text>
-          </Pressable>
-        </View>
-      </View>
-    </Modal>
-  );
-}
-
-function HomeScreen({ navigation }) {
-  const [listVisible, setListVisible] = useState(false);
-
-  return (
-    <View style={styles.container}>
-      <MyModal modalVisible={listVisible} setModalVisible={setListVisible}>
-        {listVisible === 'list' ? <List data={DATA} /> : <TextLorem />}
-      </MyModal>
-
-      <View style={styles.centeredView}>
-        <Pressable
-          style={[styles.button, styles.buttonOpenList]}
-          onPress={() => navigation.navigate('List')}
-        >
-          <Text style={styles.textStyle}>Show List</Text>
-        </Pressable>
-        <Pressable
-          style={[styles.button, styles.buttonOpenText]}
-          onPress={() => navigation.navigate('Text')}
-        >
-          <Text style={styles.textStyle}>Show Text</Text>
-        </Pressable>
-      </View>
-    </View>
   );
 }
 const Stack = createNativeStackNavigator();
@@ -173,8 +101,7 @@ function App() {
     <NavigationContainer>
       <Stack.Navigator>
         <Stack.Screen name="Home" component={HomeScreen} />
-        <Stack.Screen name="List" component={List} />
-        <Stack.Screen name="Text" component={TextLorem} />
+        <Stack.Screen name="CreateFilm" component={CreateFilm} />
       </Stack.Navigator>
     </NavigationContainer>
   );
@@ -194,9 +121,9 @@ const styles = StyleSheet.create({
   },
   header: {
     fontSize: 20,
-    backgroundColor: '#fff',
+    fontWeight: '700'
   },
-  title: {
+  text: {
     fontSize: 14,
   },
   centeredView: {
@@ -247,9 +174,12 @@ const styles = StyleSheet.create({
     backgroundColor: 'pink',
     marginHorizontal: 20,
   },
-  text: {
-    fontSize: 20,
-  },
+  input: {
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    marginVertical: 5,
+    border: '1px solid'
+  }
 });
 
 export default App;
