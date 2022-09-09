@@ -19,96 +19,20 @@ import {
 const logo =
   'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/React-icon.svg/1200px-React-icon.svg.png';
 
-const DATA = [
-  {
-    title: 'Форсаж',
-    genre: 'боевик, криминал, приключения',
-    id: 1,
-  },
-  {
-    title: 'Парк Юрского периода',
-    genre: 'приключения, фантастика, семейный',
-    id: 2,
-  },
-  {
-    title: 'Аватар',
-    genre: 'фантастика, боевик, драма, приключения',
-    id: 3,
-  },
-];
-
-function CreateFilm({ navigation, route }) {
-  const [title, setTitle] = useState('');
-  const [genre, setGenre] = useState('');
-  return (
-    <>
-      <TextInput
-        placeholder="Название фильма"
-        style={styles.input}
-        value={title}
-        onChangeText={setTitle}
-      />
-      <TextInput
-        placeholder="Жанр фильма"
-        style={styles.input}
-        value={genre}
-        onChangeText={setGenre}
-      />
-      <Button
-        title="Done"
-        onPress={() => {
-          navigation.navigate({
-            name: 'Home',
-            params: {
-              film: {
-                title,
-                genre,
-                id: route.params.id,
-              },
-            },
-          });
-        }}
-      />
-    </>
-  );
-}
-
-const Item = ({ film }) => (
-  <View style={styles.item}>
-    <Text style={styles.header}>{film.title}</Text>
-    <Text style={styles.text}>{film.genre}</Text>
-  </View>
-);
 
 function HomeScreen({ navigation, route }) {
-  const [films, setFilms] = useState([]);
-
-  useEffect(() => {
-    if (route.params?.film) {
-      setFilms((prev) => [...prev, route.params?.film]);
-    }
-  }, [route.params?.film]);
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.scrollView}>
-        {films.map((film) => {
-          return <Item film={film} key={film.id} />;
-        })}
-      </View>
-      <Pressable
-        style={[styles.button, styles.buttonOpenText]}
-        onPress={() => setFilms(DATA)}
-      >
-        <Text style={styles.textStyle}>Обновить</Text>
-      </Pressable>
-      <Link to={{screen: 'CreateFilm', params: { id: films.length }}}>Добавить из Link</Link>
-      <Pressable
-        style={[styles.button, styles.buttonOpenText]}
-        onPress={() => navigation.navigate('CreateFilm', { id: films.length })}
-      >
-        <Text style={styles.textStyle}>Добавить</Text>
-      </Pressable>
+          <Link style={[styles.button, styles.buttonClose]} to={ {screen: 'Secondary'}}> Перейти</Link>
+    </SafeAreaView>
+  );
+}
+
+function Secondary({ navigation, route }) {
+  return (
+    <SafeAreaView style={styles.container}>
+      <TextInput onChangeText={(e) => navigation.setOptions({title: e})} />
     </SafeAreaView>
   );
 }
@@ -121,22 +45,20 @@ const Stack = createNativeStackNavigator();
 function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator
-        screenOptions={{ headerStyle: { backgroundColor: 'yellow' } }}
-      >
-        <Stack.Screen name="Home" component={HomeScreen} />
-        <Stack.Screen
-          name="CreateFilm"
-          component={CreateFilm}
-          options={{
-            title: 'Yooho',
-            headerTitle: (props) => <LogoTitle {...props} />,
-            headerTintColor: 'red',
-            headerTitleStyle: { fontWeight: 'bold' },
-            headerRight: (props) => (<LogoTitle {...props} />),
-            headerTitleAlign: 'center'
-          }}
-        />
+      <Stack.Navigator>
+        <Stack.Group screenOptions={{ headerStyle: { backgroundColor: 'yellow' } }}>
+          <Stack.Screen name="Home" component={HomeScreen} />
+          <Stack.Screen
+            name="Secondary"
+            component={Secondary}
+            options={{
+              headerTitleStyle: { fontWeight:'bold', color: 'green' },
+              headerRight: (props) => (<LogoTitle {...props} />),
+              headerTitleAlign: 'center',
+              headerBackImageSource: 'https://e7.pngegg.com/pngimages/1023/763/png-clipart-arrow-font-awesome-computer-icons-back-to-back-angle-logo-thumbnail.png'
+            }}
+          />
+        </Stack.Group>
       </Stack.Navigator>
     </NavigationContainer>
   );
