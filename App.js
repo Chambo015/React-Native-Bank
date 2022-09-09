@@ -1,4 +1,4 @@
-import { NavigationContainer } from '@react-navigation/native';
+import { Link, NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React, { useEffect, useState } from 'react';
 import {
@@ -14,7 +14,10 @@ import {
   StatusBar,
   TextInput,
   Button,
+  Image,
 } from 'react-native';
+const logo =
+  'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/React-icon.svg/1200px-React-icon.svg.png';
 
 const DATA = [
   {
@@ -39,17 +42,30 @@ function CreateFilm({ navigation, route }) {
   const [genre, setGenre] = useState('');
   return (
     <>
-      <TextInput placeholder='Название фильма' style={styles.input} value={title} onChangeText={setTitle} />
-      <TextInput placeholder='Жанр фильма' style={styles.input} value={genre} onChangeText={setGenre} />
-      <Button title="Done" 
-				onPress={() => {
+      <TextInput
+        placeholder="Название фильма"
+        style={styles.input}
+        value={title}
+        onChangeText={setTitle}
+      />
+      <TextInput
+        placeholder="Жанр фильма"
+        style={styles.input}
+        value={genre}
+        onChangeText={setGenre}
+      />
+      <Button
+        title="Done"
+        onPress={() => {
           navigation.navigate({
             name: 'Home',
-            params: { film: {
-              title,
-              genre,
-              id: route.params.id
-            }},
+            params: {
+              film: {
+                title,
+                genre,
+                id: route.params.id,
+              },
+            },
           });
         }}
       />
@@ -57,7 +73,7 @@ function CreateFilm({ navigation, route }) {
   );
 }
 
-const Item = ({film}) => (
+const Item = ({ film }) => (
   <View style={styles.item}>
     <Text style={styles.header}>{film.title}</Text>
     <Text style={styles.text}>{film.genre}</Text>
@@ -69,15 +85,15 @@ function HomeScreen({ navigation, route }) {
 
   useEffect(() => {
     if (route.params?.film) {
-      setFilms(prev => [...prev, route.params?.film])
+      setFilms((prev) => [...prev, route.params?.film]);
     }
   }, [route.params?.film]);
 
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.scrollView}>
-        {films.map(film => {
-          return <Item film={film} key={film.id}/>
+        {films.map((film) => {
+          return <Item film={film} key={film.id} />;
         })}
       </View>
       <Pressable
@@ -86,22 +102,41 @@ function HomeScreen({ navigation, route }) {
       >
         <Text style={styles.textStyle}>Обновить</Text>
       </Pressable>
+      <Link to={{screen: 'CreateFilm', params: { id: films.length }}}>Добавить из Link</Link>
       <Pressable
         style={[styles.button, styles.buttonOpenText]}
-        onPress={() => navigation.navigate('CreateFilm', {id: films.length})}
+        onPress={() => navigation.navigate('CreateFilm', { id: films.length })}
       >
         <Text style={styles.textStyle}>Добавить</Text>
       </Pressable>
     </SafeAreaView>
   );
 }
+
+function LogoTitle() {
+  return <Image style={{ width: 100, height: 50 }} source={logo} />;
+}
+
 const Stack = createNativeStackNavigator();
 function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator>
+      <Stack.Navigator
+        screenOptions={{ headerStyle: { backgroundColor: 'yellow' } }}
+      >
         <Stack.Screen name="Home" component={HomeScreen} />
-        <Stack.Screen name="CreateFilm" component={CreateFilm} />
+        <Stack.Screen
+          name="CreateFilm"
+          component={CreateFilm}
+          options={{
+            title: 'Yooho',
+            headerTitle: (props) => <LogoTitle {...props} />,
+            headerTintColor: 'red',
+            headerTitleStyle: { fontWeight: 'bold' },
+            headerRight: (props) => (<LogoTitle {...props} />),
+            headerTitleAlign: 'center'
+          }}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );
@@ -121,7 +156,7 @@ const styles = StyleSheet.create({
   },
   header: {
     fontSize: 20,
-    fontWeight: '700'
+    fontWeight: '700',
   },
   text: {
     fontSize: 14,
@@ -178,8 +213,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 5,
     marginVertical: 5,
-    border: '1px solid'
-  }
+    border: '1px solid',
+  },
 });
 
 export default App;
