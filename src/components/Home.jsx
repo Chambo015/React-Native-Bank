@@ -4,6 +4,9 @@ import {
   StatusBar,
   StyleSheet,
   TouchableOpacity,
+  TouchableHighlight,
+  FlatList,
+  Pressable,
 } from 'react-native';
 import {
   Entypo,
@@ -11,9 +14,37 @@ import {
   MaterialCommunityIcons,
   FontAwesome,
 } from '@expo/vector-icons';
+import { Fontisto } from '@expo/vector-icons';
+import DATA from '../data/index';
+
 const name = 'John Smith';
 const balance = '$ 8,640.00';
+
 function HomeScreen({ navigation }) {
+  const renderItemBtns = (item, index) => {
+    return (
+      <TouchableOpacity
+        key={item.actionName + index}
+        style={styles.touchableActionBtn}
+      >
+        <View style={styles.actionBtnItem}>
+          <MaterialCommunityIcons
+            name={item.btnName}
+            size={35}
+            color="#031952"
+          />
+        </View>
+        <Text style={{ color: '#EEEEEE' }}>{item.actionName}</Text>
+      </TouchableOpacity>
+    );
+  };
+  const renderItemCards = ({ item }) => {
+    return (
+      <TouchableHighlight style={{padding: 20}}>
+     <Fontisto name={item.title} size={34} color="#E9E9E9" />
+      </TouchableHighlight>
+    );
+  };
   return (
     <View style={styles.container}>
       <StatusBar style="auto" />
@@ -26,26 +57,19 @@ function HomeScreen({ navigation }) {
       </View>
       <View style={styles.main}>
         <View style={styles.actionBtnWrap}>
-          <TouchableOpacity style={styles.touchableActionBtn}>
-            <View style={styles.actionBtnItem}>
-              <MaterialCommunityIcons
-                name="bank-transfer"
-                size={35}
-                color="#031952"
-              />
-            </View>
-            <Text style={{ color: '#EEEEEE' }}>Transfer</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.touchableActionBtn}>
-            <View style={styles.actionBtnItem}>
-              <MaterialCommunityIcons
-                name="file-document-outline"
-                size={35}
-                color="#031952"
-              />
-            </View>
-            <Text style={{ color: '#EEEEEE' }}>Bills</Text>
-          </TouchableOpacity>
+          {DATA.actionBtns.map(renderItemBtns)}
+        </View>
+        <View>
+          <Text style={styles.sectionTitle}>My Cards</Text>
+          <FlatList
+            ItemSeparatorComponent={() => (
+              <View style={{ height: 1, backgroundColor: '#585858' }}></View>
+            )}
+            style={{ backgroundColor: '#292929', borderRadius: 20 }}
+            data={DATA.cards}
+            renderItem={renderItemCards}
+            keyExtractor={(item) => item.id}
+          />
         </View>
       </View>
     </View>
@@ -62,7 +86,7 @@ const styles = StyleSheet.create({
     paddingVertical: 20,
   },
   headText: {
-    fontWeight: 500,
+    fontWeight: '500',
     fontSize: 22,
     lineHeight: 33,
     color: '#F9F9F9',
@@ -74,7 +98,7 @@ const styles = StyleSheet.create({
   },
   balanceText: {
     color: '#F9F9F9',
-    fontWeight: 600,
+    fontWeight: '600',
     fontSize: 26,
     lineHeight: 39,
   },
@@ -83,26 +107,27 @@ const styles = StyleSheet.create({
     backgroundColor: 'black',
     borderTopRightRadius: 50,
     borderTopLeftRadius: 50,
+    paddingHorizontal: 25,
   },
   actionBtnWrap: {
     flexDirection: 'row',
     paddingVertical: 33,
-    paddingHorizontal: 25,
+    justifyContent: 'space-between',
   },
   touchableActionBtn: {
     justifyContent: 'center',
     alignItems: 'center',
-    marginRight: 24,
   },
   actionBtnItem: {
     backgroundColor: '#DBE3F8',
     width: 75,
     height: 75,
-    borderRadius: '50%',
+    borderRadius: 50,
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 15,
   },
+  sectionTitle: { color: '#EEEEEE', fontSize: 20, lineHeight: 30, marginBottom: 25 },
 });
 
 export default HomeScreen;
