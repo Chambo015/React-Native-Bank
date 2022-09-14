@@ -40,8 +40,18 @@ function HomeScreen({ navigation }) {
   };
   const renderItemCards = ({ item }) => {
     return (
-      <TouchableHighlight style={{padding: 20}}>
-     <Fontisto name={item.title} size={34} color="#E9E9E9" />
+      <TouchableHighlight activeOpacity={0.9} underlayColor="#000" onPress={() => {}} style={{ padding: 20 }}>
+        <View style={styles.cardWrap}>
+            <Fontisto name={item.title} size={34} color="#E9E9E9" /> 
+          <View style={{ marginHorizontal: 24}}>
+            <Text style={styles.cardText}>{item.title.toUpperCase()}</Text>
+            <Text style={styles.cardSubText}>**{item.cardNumber}</Text>
+          </View>
+          <View style={{ marginLeft: 'auto'}}>
+            <Text style={[styles.cardText, {textAlign: 'right'}]}>{item.balance}</Text>
+            <Text style={[styles.cardSubText, {textAlign: 'right'}]}>{item.deadline}</Text>
+          </View>
+        </View>
       </TouchableHighlight>
     );
   };
@@ -62,10 +72,14 @@ function HomeScreen({ navigation }) {
         <View>
           <Text style={styles.sectionTitle}>My Cards</Text>
           <FlatList
+            style={{
+              backgroundColor: '#292929',
+              borderRadius: 20,
+              overflow: 'hidden',
+            }}
             ItemSeparatorComponent={() => (
               <View style={{ height: 1, backgroundColor: '#585858' }}></View>
             )}
-            style={{ backgroundColor: '#292929', borderRadius: 20 }}
             data={DATA.cards}
             renderItem={renderItemCards}
             keyExtractor={(item) => item.id}
@@ -127,7 +141,26 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 15,
   },
-  sectionTitle: { color: '#EEEEEE', fontSize: 20, lineHeight: 30, marginBottom: 25 },
+  sectionTitle: {
+    color: '#EEEEEE',
+    fontSize: 20,
+    lineHeight: 30,
+    marginBottom: 25,
+  },
+  cardWrap: {
+    flexDirection: 'row',
+    alignItems: 'center'
+  },
+  cardText: {
+    color: '#EEEEEE',
+    fontSize: 16,
+    lineHeight: 24
+  }, 
+  cardSubText: {
+    color: 'rgba(238, 238, 238, 0.6)',
+    fontSize: 12,
+    lineHeight: 18
+  }
 });
 
 export default HomeScreen;
