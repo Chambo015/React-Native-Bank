@@ -6,16 +6,19 @@ import {
   TouchableOpacity,
   TouchableHighlight,
   FlatList,
-  Pressable,
+  SafeAreaView, 
+  ScrollView,
+  Alert,
 } from 'react-native';
 import {
   Entypo,
   AntDesign,
   MaterialCommunityIcons,
   FontAwesome,
+  Fontisto
 } from '@expo/vector-icons';
-import { Fontisto } from '@expo/vector-icons';
 import DATA from '../data/index';
+import { NumericFormat }   from 'react-number-format';
 
 const name = 'John Smith';
 const balance = '$ 8,640.00';
@@ -42,21 +45,49 @@ function HomeScreen({ navigation }) {
     return (
       <TouchableHighlight activeOpacity={0.9} underlayColor="#000" onPress={() => {}} style={{ padding: 20 }}>
         <View style={styles.cardWrap}>
-            <Fontisto name={item.title} size={34} color="#E9E9E9" /> 
+            <Fontisto name={item.title} size={34} color="#E9E9E9" style={{width: 52, textAlign: 'center'}} /> 
           <View style={{ marginHorizontal: 24}}>
             <Text style={styles.cardText}>{item.title.toUpperCase()}</Text>
             <Text style={styles.cardSubText}>**{item.cardNumber}</Text>
           </View>
           <View style={{ marginLeft: 'auto'}}>
-            <Text style={[styles.cardText, {textAlign: 'right'}]}>{item.balance}</Text>
+              <NumericFormat 
+            value={item.balance}
+            displayType="text"
+            thousandSeparator
+            prefix="$"
+            renderText={(value) => <Text style={[styles.cardText, {textAlign: 'right'}]}>{value}</Text>}
+          />
             <Text style={[styles.cardSubText, {textAlign: 'right'}]}>{item.deadline}</Text>
           </View>
         </View>
       </TouchableHighlight>
     );
   };
+  const renderItemTransactions = ({ item }) => {
+    return (
+      <TouchableHighlight activeOpacity={0.9} underlayColor="#000" onPress={() => {}} style={{ padding: 20 }}>
+        <View style={styles.cardWrap}>
+        <FontAwesome name="dollar" size={34} color="#E9E9E9" style={{width: 52, textAlign: 'center'}} />
+          <View style={{ marginHorizontal: 24}}>
+            <Text style={styles.cardText}>{item.title.toUpperCase()}</Text>
+          </View>
+          <View style={{ marginLeft: 'auto'}}>
+              <NumericFormat 
+            value={item.value}
+            displayType="text"
+            thousandSeparator
+            prefix="-$"
+            renderText={(value) => <Text style={[styles.cardText, {textAlign: 'right'}]}>{value}</Text>}
+          />
+            
+          </View>
+        </View>
+      </TouchableHighlight>
+    );
+  };
   return (
-    <View style={styles.container}>
+    <SafeAreaView  style={styles.container}>
       <StatusBar style="auto" />
       <View style={styles.header}>
         <Text style={{ color: '#F9F9F9' }}>Good Morning!</Text>
@@ -69,24 +100,41 @@ function HomeScreen({ navigation }) {
         <View style={styles.actionBtnWrap}>
           {DATA.actionBtns.map(renderItemBtns)}
         </View>
-        <View>
+        <ScrollView showsVerticalScrollIndicator={false}>
           <Text style={styles.sectionTitle}>My Cards</Text>
           <FlatList
             style={{
               backgroundColor: '#292929',
               borderRadius: 20,
-              overflow: 'hidden',
+              marginBottom: 25,
+            }}
+            contentContainerStyle={{}}
+            ItemSeparatorComponent={() => (
+              <View style={{ height: 1, backgroundColor: '#585858' }}></View>
+            )}
+            data={DATA.cards.slice(0,2)}
+            renderItem={renderItemCards}
+            keyExtractor={(item) => item.id}
+          />
+          <Text style={styles.sectionTitle}>Recent Transactions</Text>
+          <FlatList
+            style={{
+              backgroundColor: '#292929',
+              borderRadius: 20,
+              marginBottom: 25,
             }}
             ItemSeparatorComponent={() => (
               <View style={{ height: 1, backgroundColor: '#585858' }}></View>
             )}
-            data={DATA.cards}
-            renderItem={renderItemCards}
+            data={DATA.transactions}
+            renderItem={renderItemTransactions}
             keyExtractor={(item) => item.id}
           />
-        </View>
+          
+        </ScrollView>
+        
       </View>
-    </View>
+    </SafeAreaView>
   );
 }
 

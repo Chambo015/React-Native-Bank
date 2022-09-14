@@ -5,6 +5,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import {Entypo, AntDesign, MaterialCommunityIcons, FontAwesome} from '@expo/vector-icons';
 // Компоненты
 import HomeScreen from './src/components/Home';
+import Cards from './src/components/Cards';
 
 function SettingsScreen() {
   return (
@@ -38,6 +39,13 @@ export default function App() {
               return <FontAwesome name="user" s {...params} />;
           },
           headerTitleAlign: 'center',
+          headerTitleStyle: {
+            color: 'white',
+          },
+          headerStyle: {
+            backgroundColor: 'black',
+            
+          },
           tabBarStyle: { backgroundColor: 'black', borderTopWidth: 0 },
         })}
       >
@@ -46,7 +54,7 @@ export default function App() {
           component={HomeScreen}
           options={{ headerShown: false }}
         />
-        <Tab.Screen name="Cards" component={SettingsScreen} />
+        <Tab.Screen name="Cards" component={Cards} />
         <Tab.Screen name="Transactions" component={SettingsScreen} />
         <Tab.Screen name="Profile" component={SettingsScreen} />
       </Tab.Navigator>
