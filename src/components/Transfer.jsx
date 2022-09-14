@@ -36,7 +36,7 @@ export default function Transfer({ navigation }) {
     refFlatListCard.current?.scrollToIndex({
       index: indexCard,
       animated: true,
-      viewPosition: 0.5,
+      viewPosition: 0.65,
     });
     refFlatListContacts.current?.scrollToIndex({
         index: indexContact,
@@ -95,7 +95,6 @@ export default function Transfer({ navigation }) {
             keyExtractor={(item) => item.id}
             renderItem={renderCards}
             horizontal
-            snapToInterval={CARD_WIDTH + CARD_PADDING}
             showsHorizontalScrollIndicator={false}
           />
         </View>

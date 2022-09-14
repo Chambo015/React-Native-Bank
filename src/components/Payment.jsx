@@ -25,7 +25,7 @@ export default function Payment() {
       onPress={() => setIsPayed(true)}
       style={{
         marginVertical: 50,
-        backgroundColor: '#414A61',
+        backgroundColor: isPayed && !isLoading ?'#2dcc70':'#414A61',
         padding: 20,
         borderRadius: 16,
         flexDirection: 'row',
