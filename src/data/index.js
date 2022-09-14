@@ -34,7 +34,7 @@ const data = {
       balance: 3500,
     },
   ],
-  transactions: [{ title: 'Grocery', id: 1, value: 400 }, { title: 'IESCO Bill', id: 1, value: 350 }, { title: 'Mobile Bill', id: 1, value: 235 }],
+  transactions: [{ title: 'Grocery', id: 2, value: 400 }, { title: 'IESCO Bill', id: 1, value: 350 }, { title: 'Mobile Bill', id: 3, value: 235 }, { title: 'Mobile Bill', id: 3, value: 235 }, { title: 'Mobile Bill', id: 3, value: 235 }, { title: 'Mobile Bill', id: 3, value: 235 }, { title: 'Mobile Bill', id: 3, value: 235 }, { title: 'Mobile Bill', id: 3, value: 235 }, { title: 'Mobile Bill', id: 3, value: 235 }, { title: 'Mobile Bill', id: 3, value: 235 }, { title: 'Mobile Bill', id: 3, value: 235 }, { title: 'Mobile Bill', id: 3, value: 235 }, { title: 'Mobile Bill', id: 3, value: 235 }, { title: 'Mobile Bill', id: 3, value: 235 }, { title: 'Mobile Bill', id: 3, value: 235 },{ title: 'Mobile Bill', id: 3, value: 235 }, { title: 'Mobile Bill', id: 3, value: 235 } , { title: 'Mobile Bill', id: 3, value: 235 } ,{ title: 'Mobile Bill', id: 3, value: 235 } ,{ title: 'Mobile Bill', id: 3, value: 235 } , { title: 'Mobile Bill', id: 3, value: 235 }, { title: 'Mobile Bill', id: 3, value: 235 }, { title: 'Mobile Bill', id: 3, value: 235 }],
 };
 
 export default data;

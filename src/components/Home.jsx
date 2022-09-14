@@ -126,7 +126,7 @@ function HomeScreen({ navigation }) {
             ItemSeparatorComponent={() => (
               <View style={{ height: 1, backgroundColor: '#585858' }}></View>
             )}
-            data={DATA.transactions}
+            data={DATA.transactions.slice(0,4)}
             renderItem={renderItemTransactions}
             keyExtractor={(item) => item.id}
           />

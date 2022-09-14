@@ -20,11 +20,15 @@ import {
 } from '@expo/vector-icons';
 import { NumericFormat } from 'react-number-format';
 import DATA from '../data/index';
+import { useState } from 'react';
+import Payment from './Payment';
 
 const CARD_WIDTH = 280;
 const CARD_PADDING = 20;
 
 export default function Cards({ navigation }) {
+  const [isSettings, setIsSettings] = useState(false);
+
   const renderCards = ({ item }) => {
     return (
       <View style={styles.cardWrap}>
@@ -52,10 +56,33 @@ export default function Cards({ navigation }) {
       </View>
     );
   };
+
+  const renderItemTransactions = ({ item }) => {
+    return (
+      <TouchableHighlight activeOpacity={0.9} underlayColor="#000" onPress={() => {}} style={{ padding: 20 }}>
+        <View style={styles.cardItemList}>
+        <FontAwesome name="dollar" size={34} color="#E9E9E9" style={{width: 52, textAlign: 'center'}} />
+          <View style={{ marginHorizontal: 24}}>
+            <Text style={styles.cardText}>{item.title.toUpperCase()}</Text>
+          </View>
+          <View style={{ marginLeft: 'auto'}}>
+              <NumericFormat 
+            value={item.value}
+            displayType="text"
+            thousandSeparator
+            prefix="-$"
+            renderText={(value) => <Text style={[styles.cardText, {textAlign: 'right'}]}>{value}</Text>}
+          />
+            
+          </View>
+        </View>
+      </TouchableHighlight>
+    );
+  };
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar style="auto" />
-      <View style={styles.main}>
+      <ScrollView style={styles.main} showsVerticalScrollIndicator={false}>
         <View>
           <FlatList
             data={DATA.cards}
@@ -66,27 +93,34 @@ export default function Cards({ navigation }) {
             showsHorizontalScrollIndicator={false}
           />
         </View>
-        <TouchableOpacity
-          style={{
-            marginVertical: 50,
-            backgroundColor: '#414A61',
-            padding: 20,
-            borderRadius: 16,
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-          }}
-        >
-          <Text style={styles.textBalanceCard}>Make a Payment</Text>
-          <View style={{ alignItems: 'flex-end' }}>
-            <Text style={styles.textBalanceCard}>$220</Text>
-            <Text style={styles.textCardSub}>Due: Feb 10, 2022</Text>
-          </View>
-        </TouchableOpacity>
-        <Pressable style={{backgroundColor: '#414A61'}}>
-          <Text style={styles.switchButtonTextActive}>Settings</Text>
-        </Pressable>
-      </View>
+        <Payment />
+        <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
+          <Pressable key={1} style={[styles.switchBtn, { opacity: isSettings ? 1 : 0.5}]}
+            onPress={() => setIsSettings(true)}>
+            <Text style={styles.switchButtonTextActive}>Settings</Text>
+          </Pressable>
+          <Pressable key={2}  style={[styles.switchBtn, { opacity: isSettings ? 0.5 : 1}]}
+          onPress={() => setIsSettings(false)}>
+            <Text style={styles.switchButtonTextActive}>Transactions</Text>
+          </Pressable>
+        </View>
+       <View style={{marginTop: 40}}>
+            <FlatList
+                style={{
+                  backgroundColor: '#292929',
+                  borderRadius: 20,
+                  marginBottom: 25,
+                }}
+                contentContainerStyle={{}}
+                ItemSeparatorComponent={() => (
+                  <View style={{ height: 1, backgroundColor: '#585858' }}></View>
+                )}
+                data={DATA.transactions.slice(0,4)}
+                renderItem={renderItemTransactions}
+                keyExtractor={(item) => item.id}
+              />
+       </View>
+      </ScrollView>
     </SafeAreaView>
   );
 }
@@ -133,5 +167,20 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     fontSize: 16,
     lineHeight: 24,
-  }
-});
+  },
+  switchBtn: {
+    backgroundColor: '#414A61',
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    borderRadius: 20,
+  },
+  cardItemList: {
+    flexDirection: 'row',
+    alignItems: 'center'
+  },
+  cardText: {
+    color: '#EEEEEE',
+    fontSize: 16,
+    lineHeight: 24
+  }, 
+}); 
