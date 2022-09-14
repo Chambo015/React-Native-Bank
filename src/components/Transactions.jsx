@@ -69,11 +69,11 @@ export default function Transactions() {
                     name="dollar"
                     size={34}
                     color="#E9E9E9"
-                    style={{ width: 52, height: 34, textAlign: 'center' }}
+                    style={{ width: 34, height: 34, textAlign: 'center' }}
                   />
                   <View style={{ marginHorizontal: 24 }}>
                     <Text style={styles.cardText}>
-                      {item.title.toUpperCase()}
+                      {item.title}
                     </Text>
                   </View>
                   <View style={{ marginLeft: 'auto' }}>

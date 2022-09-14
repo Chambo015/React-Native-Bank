@@ -1,3 +1,6 @@
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { faker } from '@faker-js/faker';
+
 const data = {
   actionBtns: [
     { btnName: 'bank-transfer', actionName: 'Transfer' },
@@ -34,7 +37,55 @@ const data = {
       balance: 3500,
     },
   ],
-  transactions: [{ title: 'Grocery', id: 2, value: 400 }, { title: 'IESCO Bill', id: 1, value: 350 }, { title: 'Mobile Bill', id: 3, value: 235 }, { title: 'Mobile Bill', id: 3, value: 235 }, { title: 'Mobile Bill', id: 3, value: 235 }, { title: 'Mobile Bill', id: 3, value: 235 }, { title: 'Mobile Bill', id: 3, value: 235 }, { title: 'Mobile Bill', id: 3, value: 235 }, { title: 'Mobile Bill', id: 3, value: 235 }, { title: 'Mobile Bill', id: 3, value: 235 }, { title: 'Mobile Bill', id: 3, value: 235 }, { title: 'Mobile Bill', id: 3, value: 235 }, { title: 'Mobile Bill', id: 3, value: 235 }, { title: 'Mobile Bill', id: 3, value: 235 }, { title: 'Mobile Bill', id: 3, value: 235 },{ title: 'Mobile Bill', id: 3, value: 235 }, { title: 'Mobile Bill', id: 3, value: 235 } , { title: 'Mobile Bill', id: 3, value: 235 } ,{ title: 'Mobile Bill', id: 3, value: 235 } ,{ title: 'Mobile Bill', id: 3, value: 235 } , { title: 'Mobile Bill', id: 3, value: 235 }, { title: 'Mobile Bill', id: 3, value: 235 }, { title: 'Mobile Bill', id: 3, value: 235 }],
+  transactions: [ ...Array(30).keys()].map((_, i) => {
+    return {
+      id: faker.datatype.uuid(),
+      title: faker.name.fullName(),
+      value: faker.random.numeric(3)
+    }
+  }),
+    
+  settings: [
+    {
+      icon() {
+        return (
+          <MaterialCommunityIcons
+            name="file-document-outline"
+            size={34}
+            color="#DDDDDD"
+            style={{ width: 52, textAlign: 'center' }}
+          />
+        );
+      },
+      title: 'View Statement',
+    },
+    {
+      icon() {
+        return (
+          <MaterialCommunityIcons
+            name="code-equal"
+            size={34}
+            color="#DDDDDD"
+            style={{ width: 52, textAlign: 'center' }}
+          />
+        );
+      },
+      title: 'Change Pin',
+    },
+    {
+      icon() {
+        return (
+          <MaterialCommunityIcons
+            name="card-remove-outline"
+            size={34}
+            color="#DDDDDD"
+            style={{ width: 52, textAlign: 'center' }}
+          />
+        );
+      },
+      title: 'Remove Card',
+    },
+  ],
 };
 
 export default data;

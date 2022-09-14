@@ -7,6 +7,7 @@ import {Entypo, AntDesign, MaterialCommunityIcons, FontAwesome} from '@expo/vect
 import HomeScreen from './src/components/Home';
 import Cards from './src/components/Cards';
 import Transactions from './src/components/Transactions';
+import Transfer from './src/components/Transfer';
 
 function SettingsScreen() {
   return (
@@ -57,7 +58,7 @@ export default function App() {
         />
         <Tab.Screen name="Cards" component={Cards} />
         <Tab.Screen name="Transactions" component={Transactions} />
-        <Tab.Screen name="Profile" component={SettingsScreen} />
+        <Tab.Screen name="Profile" component={Transfer} />
       </Tab.Navigator>
     </NavigationContainer>
   );

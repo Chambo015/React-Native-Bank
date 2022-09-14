@@ -23,7 +23,8 @@
     "react-number-format": "^5.0.0-beta.4"
   },
   "devDependencies": {
-    "@babel/core": "^7.12.9"
+    "@babel/core": "^7.12.9",
+    "@faker-js/faker": "^7.5.0"
   },
   "private": true
 }

@@ -27,7 +27,7 @@ const CARD_WIDTH = 280;
 const CARD_PADDING = 20;
 
 export default function Cards({ navigation }) {
-  const [isSettings, setIsSettings] = useState(false);
+  const [isSettings, setIsSettings] = useState(true);
 
   const renderCards = ({ item }) => {
     return (
@@ -59,21 +59,59 @@ export default function Cards({ navigation }) {
 
   const renderItemTransactions = ({ item }) => {
     return (
-      <TouchableHighlight activeOpacity={0.9} underlayColor="#000" onPress={() => {}} style={{ padding: 20 }}>
+      <TouchableHighlight
+        activeOpacity={0.9}
+        underlayColor="#000"
+        onPress={() => {}}
+        style={{ padding: 20 }}
+      >
         <View style={styles.cardItemList}>
-        <FontAwesome name="dollar" size={34} color="#E9E9E9" style={{width: 52, textAlign: 'center'}} />
-          <View style={{ marginHorizontal: 24}}>
+          <FontAwesome
+            name="dollar"
+            size={34}
+            color="#E9E9E9"
+            style={{ width: 52, textAlign: 'center' }}
+          />
+          <View style={{ marginHorizontal: 24 }}>
             <Text style={styles.cardText}>{item.title.toUpperCase()}</Text>
           </View>
-          <View style={{ marginLeft: 'auto'}}>
-              <NumericFormat 
-            value={item.value}
-            displayType="text"
-            thousandSeparator
-            prefix="-$"
-            renderText={(value) => <Text style={[styles.cardText, {textAlign: 'right'}]}>{value}</Text>}
-          />
-            
+          <View style={{ marginLeft: 'auto' }}>
+            <NumericFormat
+              value={item.value}
+              displayType="text"
+              thousandSeparator
+              prefix="-$"
+              renderText={(value) => (
+                <Text style={[styles.cardText, { textAlign: 'right' }]}>
+                  {value}
+                </Text>
+              )}
+            />
+          </View>
+        </View>
+      </TouchableHighlight>
+    );
+  };
+
+  const renderItemSettings = ({ item }) => {
+    return (
+      <TouchableHighlight
+        activeOpacity={0.9}
+        underlayColor="#000"
+        onPress={() => {}}
+        style={{ padding: 20 }}
+      >
+        <View style={styles.cardItemList}>
+          {item.icon()}
+          <View style={{ marginHorizontal: 24 }}>
+            <Text style={styles.cardText}>{item.title}</Text>
+          </View>
+          <View style={{ marginLeft: 'auto' }}>
+            <Entypo
+              name="chevron-right"
+              size={24}
+              color="rgba(209, 209, 209, 0.6)"
+            />
           </View>
         </View>
       </TouchableHighlight>
@@ -95,31 +133,54 @@ export default function Cards({ navigation }) {
         </View>
         <Payment />
         <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
-          <Pressable key={1} style={[styles.switchBtn, { opacity: isSettings ? 1 : 0.5}]}
-            onPress={() => setIsSettings(true)}>
+          <Pressable
+            key={1}
+            style={[styles.switchBtn, { opacity: isSettings ? 1 : 0.5 }]}
+            onPress={() => setIsSettings(true)}
+          >
             <Text style={styles.switchButtonTextActive}>Settings</Text>
           </Pressable>
-          <Pressable key={2}  style={[styles.switchBtn, { opacity: isSettings ? 0.5 : 1}]}
-          onPress={() => setIsSettings(false)}>
+          <Pressable
+            key={2}
+            style={[styles.switchBtn, { opacity: isSettings ? 0.5 : 1 }]}
+            onPress={() => setIsSettings(false)}
+          >
             <Text style={styles.switchButtonTextActive}>Transactions</Text>
           </Pressable>
         </View>
-       <View style={{marginTop: 40}}>
+        <View style={{ marginTop: 40 }}>
+          {isSettings ? (
             <FlatList
-                style={{
-                  backgroundColor: '#292929',
-                  borderRadius: 20,
-                  marginBottom: 25,
-                }}
-                contentContainerStyle={{}}
-                ItemSeparatorComponent={() => (
-                  <View style={{ height: 1, backgroundColor: '#585858' }}></View>
-                )}
-                data={DATA.transactions.slice(0,4)}
-                renderItem={renderItemTransactions}
-                keyExtractor={(item) => item.id}
-              />
-       </View>
+              style={{
+                backgroundColor: '#292929',
+                borderRadius: 20,
+                marginBottom: 25,
+              }}
+              contentContainerStyle={{}}
+              ItemSeparatorComponent={() => (
+                <View style={{ height: 1, backgroundColor: '#585858' }}></View>
+              )}
+              data={DATA.settings}
+              renderItem={renderItemSettings}
+              keyExtractor={(item) => item.id}
+            />
+          ) : (
+            <FlatList
+              style={{
+                backgroundColor: '#292929',
+                borderRadius: 20,
+                marginBottom: 25,
+              }}
+              contentContainerStyle={{}}
+              ItemSeparatorComponent={() => (
+                <View style={{ height: 1, backgroundColor: '#585858' }}></View>
+              )}
+              data={DATA.transactions.slice(0, 3)}
+              renderItem={renderItemTransactions}
+              keyExtractor={(item) => item.id}
+            />
+          )}
+        </View>
       </ScrollView>
     </SafeAreaView>
   );
@@ -176,11 +237,11 @@ const styles = StyleSheet.create({
   },
   cardItemList: {
     flexDirection: 'row',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   cardText: {
     color: '#EEEEEE',
     fontSize: 16,
-    lineHeight: 24
-  }, 
-}); 
+    lineHeight: 24,
+  },
+});
