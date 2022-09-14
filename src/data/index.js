@@ -4,7 +4,7 @@ import { faker } from '@faker-js/faker';
 const data = {
   actionBtns: [
     { btnName: 'bank-transfer', actionName: 'Transfer' },
-    { btnName: 'file-document-outline', actionName: 'Transfer' },
+    { btnName: 'file-document-outline', actionName: 'Bills' },
     { btnName: 'cellphone', actionName: 'Recharge' },
     { btnName: 'dots-horizontal', actionName: 'More' },
   ],
@@ -86,6 +86,13 @@ const data = {
       title: 'Remove Card',
     },
   ],
+  contacts: [ ...Array(10).keys()].map((_, i) => {
+    return {
+      id: faker.datatype.uuid(),
+      name: faker.name.firstName(),
+      avatar: faker.image.avatar()
+    }
+  }),
 };
 
 export default data;

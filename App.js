@@ -58,7 +58,7 @@ export default function App() {
         />
         <Tab.Screen name="Cards" component={Cards} />
         <Tab.Screen name="Transactions" component={Transactions} />
-        <Tab.Screen name="Profile" component={Transfer} />
+        <Tab.Screen name="Profile" component={Transfer} options={{title: 'Transfer'}}/>
       </Tab.Navigator>
     </NavigationContainer>
   );
