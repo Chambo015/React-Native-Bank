@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   TouchableHighlight,
   FlatList,
-  SafeAreaView, 
+  SafeAreaView,
   ScrollView,
   Alert,
 } from 'react-native';
@@ -15,10 +15,10 @@ import {
   AntDesign,
   MaterialCommunityIcons,
   FontAwesome,
-  Fontisto
+  Fontisto,
 } from '@expo/vector-icons';
 import DATA from '../data/index';
-import { NumericFormat }   from 'react-number-format';
+import { NumericFormat } from 'react-number-format';
 
 const name = 'John Smith';
 const balance = '$ 8,640.00';
@@ -27,6 +27,7 @@ function HomeScreen({ navigation }) {
   const renderItemBtns = (item, index) => {
     return (
       <TouchableOpacity
+        onPress={() => navigation.navigate(item.actionName)}
         key={item.actionName + index}
         style={styles.touchableActionBtn}
       >
@@ -43,22 +44,38 @@ function HomeScreen({ navigation }) {
   };
   const renderItemCards = ({ item }) => {
     return (
-      <TouchableHighlight activeOpacity={0.9} underlayColor="#000" onPress={() => {}} style={{ padding: 20 }}>
+      <TouchableHighlight
+      onPress={() => navigation.navigate('Cards')}
+        activeOpacity={0.9}
+        underlayColor="#000"
+        style={{ padding: 20 }}
+      >
         <View style={styles.cardWrap}>
-            <Fontisto name={item.title} size={34} color="#E9E9E9" style={{width: 52, textAlign: 'center'}} /> 
-          <View style={{ marginHorizontal: 24}}>
+          <Fontisto
+            name={item.title}
+            size={34}
+            color="#E9E9E9"
+            style={{ width: 52, textAlign: 'center' }}
+          />
+          <View style={{ marginHorizontal: 24 }}>
             <Text style={styles.cardText}>{item.title.toUpperCase()}</Text>
             <Text style={styles.cardSubText}>**{item.cardNumber}</Text>
           </View>
-          <View style={{ marginLeft: 'auto'}}>
-              <NumericFormat 
-            value={item.balance}
-            displayType="text"
-            thousandSeparator
-            prefix="$"
-            renderText={(value) => <Text style={[styles.cardText, {textAlign: 'right'}]}>{value}</Text>}
-          />
-            <Text style={[styles.cardSubText, {textAlign: 'right'}]}>{item.deadline}</Text>
+          <View style={{ marginLeft: 'auto' }}>
+            <NumericFormat
+              value={item.balance}
+              displayType="text"
+              thousandSeparator
+              prefix="$"
+              renderText={(value) => (
+                <Text style={[styles.cardText, { textAlign: 'right' }]}>
+                  {value}
+                </Text>
+              )}
+            />
+            <Text style={[styles.cardSubText, { textAlign: 'right' }]}>
+              {item.deadline}
+            </Text>
           </View>
         </View>
       </TouchableHighlight>
@@ -66,28 +83,41 @@ function HomeScreen({ navigation }) {
   };
   const renderItemTransactions = ({ item }) => {
     return (
-      <TouchableHighlight activeOpacity={0.9} underlayColor="#000" onPress={() => {}} style={{ padding: 20 }}>
+      <TouchableHighlight
+        activeOpacity={0.9}
+        underlayColor="#000"
+        onPress={() => navigation.navigate('Transactions')}
+        style={{ padding: 20 }}
+      >
         <View style={styles.cardWrap}>
-        <FontAwesome name="dollar" size={34} color="#E9E9E9" style={{width: 52, textAlign: 'center'}} />
-          <View style={{ marginHorizontal: 24}}>
-            <Text style={styles.cardText}>{item.title.toUpperCase()}</Text>
-          </View>
-          <View style={{ marginLeft: 'auto'}}>
-              <NumericFormat 
-            value={item.value}
-            displayType="text"
-            thousandSeparator
-            prefix="-$"
-            renderText={(value) => <Text style={[styles.cardText, {textAlign: 'right'}]}>{value}</Text>}
+          <FontAwesome
+            name="dollar"
+            size={34}
+            color="#E9E9E9"
+            style={{ width: 52, textAlign: 'center' }}
           />
-            
+          <View style={{ marginHorizontal: 24 }}>
+            <Text style={styles.cardText}>{item.title}</Text>
+          </View>
+          <View style={{ marginLeft: 'auto' }}>
+            <NumericFormat
+              value={item.value}
+              displayType="text"
+              thousandSeparator
+              prefix="-$"
+              renderText={(value) => (
+                <Text style={[styles.cardText, { textAlign: 'right' }]}>
+                  {value}
+                </Text>
+              )}
+            />
           </View>
         </View>
       </TouchableHighlight>
     );
   };
   return (
-    <SafeAreaView  style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <StatusBar style="auto" />
       <View style={styles.header}>
         <Text style={{ color: '#F9F9F9' }}>Good Morning!</Text>
@@ -112,7 +142,7 @@ function HomeScreen({ navigation }) {
             ItemSeparatorComponent={() => (
               <View style={{ height: 1, backgroundColor: '#585858' }}></View>
             )}
-            data={DATA.cards.slice(0,2)}
+            data={DATA.cards.slice(0, 2)}
             renderItem={renderItemCards}
             keyExtractor={(item) => item.id}
           />
@@ -126,13 +156,11 @@ function HomeScreen({ navigation }) {
             ItemSeparatorComponent={() => (
               <View style={{ height: 1, backgroundColor: '#585858' }}></View>
             )}
-            data={DATA.transactions.slice(0,4)}
+            data={DATA.transactions.slice(0, 4)}
             renderItem={renderItemTransactions}
             keyExtractor={(item) => item.id}
           />
-          
         </ScrollView>
-        
       </View>
     </SafeAreaView>
   );
@@ -197,18 +225,18 @@ const styles = StyleSheet.create({
   },
   cardWrap: {
     flexDirection: 'row',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   cardText: {
     color: '#EEEEEE',
     fontSize: 16,
-    lineHeight: 24
-  }, 
+    lineHeight: 24,
+  },
   cardSubText: {
     color: 'rgba(238, 238, 238, 0.6)',
     fontSize: 12,
-    lineHeight: 18
-  }
+    lineHeight: 18,
+  },
 });
 
 export default HomeScreen;

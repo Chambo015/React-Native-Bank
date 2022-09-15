@@ -37,8 +37,8 @@ export default function App() {
                   {...params}
                 />
               );
-            if (route.name === 'Profile')
-              return <FontAwesome name="user" s {...params} />;
+            if (route.name === 'Transfer')
+              return <MaterialCommunityIcons name="bank-transfer" s {...params} />;
           },
           headerTitleAlign: 'center',
           headerTitleStyle: {
@@ -58,7 +58,7 @@ export default function App() {
         />
         <Tab.Screen name="Cards" component={Cards} />
         <Tab.Screen name="Transactions" component={Transactions} />
-        <Tab.Screen name="Profile" component={Transfer} options={{title: 'Transfer'}}/>
+        <Tab.Screen name="Transfer" component={Transfer} />
       </Tab.Navigator>
     </NavigationContainer>
   );

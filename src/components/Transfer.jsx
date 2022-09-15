@@ -11,7 +11,8 @@ import {
   TouchableHighlight,
   ScrollView,
   KeyboardAvoidingView,
-  Keyboard
+  Keyboard,
+  Modal
 } from 'react-native';
 import {
   Entypo,
@@ -23,6 +24,7 @@ import {
 import DATA from '../data/index';
 import { NumericFormat } from 'react-number-format';
 import { useEffect, useRef, useState } from 'react';
+import MyModal from './MyModal';
 
 const CARD_WIDTH = 280;
 const CARD_PADDING = 20;
@@ -36,8 +38,10 @@ export default function Transfer({ navigation }) {
   const refFlatListContacts = useRef(null);
   const [indexCard, setIndexCard] = useState(0);
   const [indexContact, setIndexContact] = useState(null);
+
   const [value, setValue] = useState('');
   const [purposeText, setPurposeText] = useState('');
+  const [modalVisible, setModalVisible] = useState(false);
 
   useEffect(() => {
     refFlatListCard.current?.scrollToIndex({
@@ -184,9 +188,10 @@ export default function Transfer({ navigation }) {
         </View>
        
       </ScrollView>
-      <TouchableHighlight onPress={Keyboard.dismiss} style={styles.submitButton}>
+      <TouchableHighlight onPress={() => {Keyboard.dismiss(); setModalVisible()}} style={styles.submitButton}>
           <Text style={styles.submitButtonText}>Send</Text>
         </TouchableHighlight>
+        <MyModal setModalVisible={setModalVisible} modalVisible={modalVisible} /> 
     </KeyboardAvoidingView>
   );
 }
@@ -278,7 +283,8 @@ const styles = StyleSheet.create({
     bottom: 20,
     flex: 1,
     left: 25,
-    right: 25
+    right: 25,
+    elevation: 2
   },
   submitButtonText: {
     color: '#F9F9F9',
